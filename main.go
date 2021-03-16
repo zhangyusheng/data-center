@@ -11,8 +11,8 @@ import (
 	"github.com/zhangyusheng/data-center/pkg/gredis"
 	"github.com/zhangyusheng/data-center/pkg/logging"
 	"github.com/zhangyusheng/data-center/pkg/setting"
-	"github.com/zhangyusheng/data-center/routers"
 	"github.com/zhangyusheng/data-center/pkg/util"
+	"github.com/zhangyusheng/data-center/routers"
 )
 
 func init() {

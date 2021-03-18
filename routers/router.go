@@ -3,8 +3,6 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 
-	_ "github.com/zhangyusheng/data-center/docs"
-
 	"github.com/zhangyusheng/data-center/routers/api"
 	"github.com/zhangyusheng/data-center/routers/api/v1"
 )
@@ -21,6 +19,7 @@ func InitRouter() *gin.Engine {
 	{
 		//获取标签列表
 		apiv1.GET("/GenDoubanGraph", v1.GenDoubanGraph)
+		apiv1.GET("/GenDoubanData", v1.GenDoubanData)
 		apiv1.GET("/CorePage", v1.CorePage)
 	}
 

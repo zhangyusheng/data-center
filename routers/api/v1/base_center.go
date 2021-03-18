@@ -43,7 +43,7 @@ func CorePage(c *gin.Context) {
 	bar2 := charts.NewBar()
 	bar2.SetGlobalOptions(charts.TitleOpts{Title: "my示例图"})
 	bar2.AddXAxis(nameItems).
-		AddYAxis("商家A", []int{10, 20, 30}).
+		AddYAxis("商家A", [ ]int{10, 20, 30}).
 		AddYAxis("商家B", []int{15, 25, 35})
 	p.Add(
 		bar2,

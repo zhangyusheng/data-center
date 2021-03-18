@@ -53,7 +53,7 @@ func CheckImageExt(fileName string) bool {
 func CheckImageSize(f multipart.File) bool {
 	size, err := file.GetSize(f)
 	if err != nil {
-		logging.Error(map[string]interface{}{}, err.Error())
+		logging.Logger.Error(map[string]interface{}{}, err.Error())
 		return false
 	}
 

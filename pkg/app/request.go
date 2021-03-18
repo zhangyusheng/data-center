@@ -9,7 +9,7 @@ import (
 // MarkErrors logs error logs
 func MarkErrors(errors []*validation.Error) {
 	for _, err := range errors {
-		logging.Error(map[string]interface{}{}, err.String())
+		logging.Logger.Error(map[string]interface{}{}, err.String())
 	}
 
 	return

@@ -4,11 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/go-echarts/go-echarts/charts"
+	"github.com/zhangyusheng/data-center/logic/douban"
 	"github.com/zhangyusheng/data-center/pkg/logging"
 )
 
 func GenDoubanGraph(c *gin.Context) {
-	logging.Info(map[string]interface{}{"name":"zhangyusheng"}, "good")
+	logging.Logger.Info(map[string]interface{}{"name":"zhangyusheng"}, "good")
 	p := charts.NewPage(orderRouters("豆瓣250")...)
 	nameItems := []string{"衣", "食", "住"}
 	bar := charts.NewBar()
@@ -29,5 +30,10 @@ func GenDoubanGraph(c *gin.Context) {
 	)
 
 	p.Render(c.Writer)
+}
+
+func GenDoubanData(c *gin.Context) {
+	logging.Logger.WithFields(map[string]interface{}{}).Info("start parsing douban")
+	douban.GenDoubanData()
 }
 

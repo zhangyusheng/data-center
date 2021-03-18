@@ -31,19 +31,3 @@ func Setup() {
 	Logger.SetReportCaller(true)
 	Logger.SetFormatter(&logrus.JSONFormatter{})
 }
-
-func Info(logInfo map[string]interface{}, msg ...interface{})  {
-	Logger.WithFields(logInfo).Info(msg)
-}
-
-func Warn(logInfo map[string]interface{}, msg ...interface{})  {
-	Logger.WithFields(logInfo).Warn(msg)
-}
-
-func Error(logInfo map[string]interface{}, msg ...interface{})  {
-	Logger.WithFields(logInfo).Error(msg)
-}
-
-func Fatal(logInfo map[string]interface{}, msg ...interface{})  {
-	Logger.WithFields(logInfo).Fatal(msg)
-}

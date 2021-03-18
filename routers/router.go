@@ -20,7 +20,8 @@ func InitRouter() *gin.Engine {
 	apiv1 := r.Group("/api/v1")
 	{
 		//获取标签列表
-		apiv1.GET("/test", v1.Test)
+		apiv1.GET("/GenDoubanGraph", v1.GenDoubanGraph)
+		apiv1.GET("/CorePage", v1.CorePage)
 	}
 
 	return r

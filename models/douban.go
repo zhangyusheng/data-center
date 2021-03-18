@@ -45,3 +45,22 @@ func UpsertMovie(movieIns Movie) error {
 	}
 	return nil
 }
+
+func GetMovies(pageNum int, pageSize int, maps interface{}) ([]Movie, error) {
+	var (
+		movies []Movie
+		err  error
+	)
+
+	if pageSize > 0 && pageNum > 0 {
+		err = db.Where(maps).Find(&movies).Offset(pageNum).Limit(pageSize).Error
+	} else {
+		err = db.Where(maps).Find(&movies).Error
+	}
+
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	return movies, nil
+}

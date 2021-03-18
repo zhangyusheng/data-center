@@ -1,86 +1,49 @@
 package logging
 
 import (
-	"fmt"
-	"github.com/zhangyusheng/data-center/pkg/file"
-	"log"
+	rotates "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/sirupsen/logrus"
+	"io"
 	"os"
-	"path/filepath"
-	"runtime"
+	"time"
 )
 
-type Level int
-
-var (
-	F *os.File
-
-	DefaultPrefix      = ""
-	DefaultCallerDepth = 2
-
-	logger     *log.Logger
-	logPrefix  = ""
-	levelFlags = []string{"DEBUG", "INFO", "WARN", "ERROR", "FATAL"}
-)
-
-const (
-	DEBUG Level = iota
-	INFO
-	WARNING
-	ERROR
-	FATAL
-)
+var Logger *logrus.Logger
 
 // Setup initialize the log instance
 func Setup() {
-	var err error
-	filePath := getLogFilePath()
-	fileName := getLogFileName()
-	F, err = file.MustOpen(fileName, filePath)
-	if err != nil {
-		log.Fatalf("logging.Setup err: %v", err)
-	}
+	Logger = logrus.New()
+	path := "/Users/huangmei/go/project/go.log"
 
-	logger = log.New(F, DefaultPrefix, log.LstdFlags)
+	//下面配置日志每隔1小时轮转一个新文件，保留最近7天的日志文件，多余的自动清理掉。
+	writer, _ := rotates.New(
+		path+".%Y%m%d%H",
+		rotates.WithLinkName(path),
+		rotates.WithMaxAge(time.Duration(7 * 24) * time.Hour),
+		rotates.WithRotationTime(time.Hour),
+	)
+
+	//同时写文件和屏幕
+	writers := []io.Writer{writer, os.Stdout}
+	fileAndStdoutWriter := io.MultiWriter(writers...)
+
+	Logger.SetOutput(fileAndStdoutWriter)
+	Logger.SetReportCaller(true)
+	Logger.SetFormatter(&logrus.JSONFormatter{})
 }
 
-// Debug output logs at debug level
-func Debug(v ...interface{}) {
-	setPrefix(DEBUG)
-	logger.Println(v)
+func Info(logInfo map[string]interface{}, msg ...interface{})  {
+	Logger.WithFields(logInfo).Info(msg)
 }
 
-// Info output logs at info level
-func Info(v ...interface{}) {
-	setPrefix(INFO)
-	logger.Println(v)
+func Warn(logInfo map[string]interface{}, msg ...interface{})  {
+	Logger.WithFields(logInfo).Warn(msg)
 }
 
-// Warn output logs at warn level
-func Warn(v ...interface{}) {
-	setPrefix(WARNING)
-	logger.Println(v)
+func Error(logInfo map[string]interface{}, msg ...interface{})  {
+	Logger.WithFields(logInfo).Error(msg)
 }
 
-// Error output logs at error level
-func Error(v ...interface{}) {
-	setPrefix(ERROR)
-	logger.Println(v)
-}
-
-// Fatal output logs at fatal level
-func Fatal(v ...interface{}) {
-	setPrefix(FATAL)
-	logger.Fatalln(v)
-}
-
-// setPrefix set the prefix of the log output
-func setPrefix(level Level) {
-	_, file, line, ok := runtime.Caller(DefaultCallerDepth)
-	if ok {
-		logPrefix = fmt.Sprintf("[%s][%s:%d]", levelFlags[level], filepath.Base(file), line)
-	} else {
-		logPrefix = fmt.Sprintf("[%s]", levelFlags[level])
-	}
-
-	logger.SetPrefix(logPrefix)
+func Fatal(logInfo map[string]interface{}, msg ...interface{})  {
+	Logger.WithFields(logInfo).Fatal(msg)
 }

@@ -19,10 +19,12 @@ func GenDoubanGraph(c *gin.Context) {
 	starBar := douban.GenStarBar(movies)
 	tagWc := douban.GenWordCloud(movies)
 	areaBar := douban.GenAreaGraph(movies)
+	yearLine := douban.GenYearLine(movies)
 	p.Add(
 		starBar,
 		tagWc,
 		areaBar,
+		yearLine,
 	)
 
 	p.Render(c.Writer)

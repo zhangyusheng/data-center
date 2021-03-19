@@ -32,7 +32,6 @@ func GenStarBar(movies []models.Movie) *charts.Bar {
 	for _, idx := range starIndex {
 		starValue = append(starValue, starData[idx])
 	}
-
 	return gcharts.GenBarGraph("评分分布图","star", starIndex, starValue)
 }
 
@@ -49,8 +48,6 @@ func GenWordCloud(movies []models.Movie) *charts.WordCloud {
 	for k,v := range tagData{
 		tagDataFin[k] = v
 	}
-
-	logging.Logger.Info(tagData)
     return gcharts.GenWcGraph("高分电影标签分布", "标签分布", tagDataFin)
 }
 
@@ -68,6 +65,22 @@ func GenAreaGraph(movies []models.Movie) *charts.Bar {
 		xdata = append(xdata, k)
 		ydata = append(ydata, v)
 	}
-
 	return gcharts.GenBarGraph("高分电影地区分布图","地区分布", xdata, ydata)
+}
+
+func GenYearLine(movies []models.Movie) *charts.Line {
+	yearData := map[string]int{}
+	yearIndex := []string{}
+	yearValue := []int{}
+	for _, movie := range movies {
+		yearData[movie.Year] += 1
+		if !util.InArray(movie.Year, yearIndex) {
+			yearIndex = append(yearIndex, movie.Year)
+		}
+	}
+	sort.Sort(sort.StringSlice(yearIndex))
+	for _, idx := range yearIndex {
+		yearValue = append(yearValue, yearData[idx])
+	}
+    return gcharts.GenLineGraph("高分电影年代曲线","年代", yearIndex, yearValue)
 }

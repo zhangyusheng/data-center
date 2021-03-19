@@ -17,16 +17,12 @@ func GenDoubanGraph(c *gin.Context) {
 	movies := douban.LoadData()
 
 	starBar := douban.GenStarBar(movies)
-
-	nameItems := []string{"衣", "食", "住"}
-	bar2 := charts.NewBar()
-	bar2.SetGlobalOptions(charts.TitleOpts{Title: "my示例图"})
-	bar2.AddXAxis(nameItems).
-		AddYAxis("商家A", []int{10, 20, 30}).
-		AddYAxis("商家B", []int{15, 25, 35})
+	tagWc := douban.GenWordCloud(movies)
+	areaBar := douban.GenAreaGraph(movies)
 	p.Add(
 		starBar,
-		bar2,
+		tagWc,
+		areaBar,
 	)
 
 	p.Render(c.Writer)
